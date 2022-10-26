@@ -1,5 +1,4 @@
 import sqlite3
-from stack import Stack
 
 class TransitionDB():
   def __init__(self):
