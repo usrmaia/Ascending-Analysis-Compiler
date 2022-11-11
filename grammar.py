@@ -1,11 +1,11 @@
 GRAMMAR = {
   # key: A -> Exp => [A, Exp]
-  "1": ["E", "E", "+", "T"],
-  "2": ["E", "T"],
-  "3": ["T", "T", "*", "F"],
-  "4": ["T", "F"],
-  "5": ["F", "(", "E", ")"],
-  "6": ["F", "id"],
+  "1": ["E", "->", "E", "+", "T"],
+  "2": ["E", "->", "T"],
+  "3": ["T", "->", "T", "*", "F"],
+  "4": ["T", "->", "F"],
+  "5": ["F", "->", "(", "E", ")"],
+  "6": ["F", "->", "id"],
 }
 
 TABLE_SLR = {
@@ -72,3 +72,71 @@ TABLE_SLR = {
 
   "7, F": "10",
 }
+
+"""
+E'→ E
+E → E+T | T
+T → T*F | F
+F → (E) | id
+"""
+
+grammar = {
+  "E": [["E", "+", "T"], ["T"]],
+  "T": [["T", "*", "F"], ["F"]],
+  "F": [["(", "E", ")"], ["id"]],
+}
+
+grammar_point = {
+  "E": [["E", "+", "T"], ["T"]],
+  "T": [["T", "*", "F"], ["F"]],
+  "F": [["(", "E", ")"], ["id"]],
+}
+
+grammar = [
+  {"E": ["E", "+", "T"]},
+  {"E": ["T"]},
+  {"T": ["T", "*", "F"]},
+  {"T": ["F"]},
+  {"F": ["(", "E", ")"]},
+  {"F": ["id"]},
+]
+
+def new_s(grammar, key_s):
+  new_grammar = [
+    {f"{key_s}'": [f"{key_s}"]}
+  ]
+  new_grammar.extend(grammar)
+
+  return new_grammar
+
+def lr_point(grammar): 
+  new_grammar = []
+  for i, dictionary in enumerate(grammar):
+    key = dictionary.keys()
+    key = list(key)
+    key = key[0]
+    print(i, key)
+
+    print(grammar[i][key])
+    for y in range(0, len(grammar[i][key]) + 1):
+      left_point = grammar[i][key][:y]
+      #if not left_point: left_point = ""
+
+      right_point = grammar[i][key][y:]
+      
+      new_grammar.extend([{
+        f"{key}": [left_point, ".", right_point]
+      }])
+  
+  return new_grammar
+
+def simpleLR0():
+  g = new_s(grammar, "E")
+  g = lr_point(g)
+  
+  print("grammar point")
+  for e in g:
+    print(e)
+
+if __name__=="__main__":
+  simpleLR0()

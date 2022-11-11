@@ -48,11 +48,11 @@ class AscendingAnalysis(DB):
     g_key = t_action[1:]
     g_prod = GRAMMAR.get(g_key)
 
-    self.addDB(f"Reduce {top_stack} -> {top_input}: r{g_key} ({g_prod[0]} -> {g_prod[1:]})")
+    self.addDB(f"Reduce {top_stack} -> {top_input}: r{g_key} ({g_prod[0]} -> {g_prod[2:]})")
 
     new_symbol = g_prod[0]
     
-    unstack_list = list(reversed(g_prod[1:]))
+    unstack_list = list(reversed(g_prod[2:]))
     for e in unstack_list:
       if e == self.symbol.list[self.symbol.top]:
         self.stack.get()
