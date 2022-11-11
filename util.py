@@ -12,3 +12,5 @@ def isOK(cell):
   if cell is None: return False
   elif cell == "OK": return True
   return False
+
+  
